@@ -19,9 +19,9 @@ def get_paths():
 
 def push():
     shutil.copyfile(save_path, os.getcwd() + "\\waffle.zip")
-    with ZipFile("./waffle.zip", "r") as zipObj:
-        zipObj.extractall("./waffle")
-    os.remove("./waffle.zip")
+    # with ZipFile("./waffle.zip", "r") as zipObj:
+    #     zipObj.extractall("./waffle")
+    # os.remove("./waffle.zip")
     os.system("git add *")
     time = datetime.now(pytz.timezone("America/New_York"))
     current_time = time.strftime("%H:%M:%S")
@@ -31,9 +31,9 @@ def push():
 def pull():
     new_save = "Already up to date." not in str(subprocess.check_output("git pull", shell=True))
     if new_save:
-        with ZipFile("./waffle.zip", "w") as zip:
-            for file in get_paths():
-                zip.write(file)
+        # with ZipFile("./waffle.zip", "w") as zip:
+        #     for file in get_paths():
+        #         zip.write(file)
         shutil.copyfile("./waffle.zip", save_path)
     else:
         print("no new save")
