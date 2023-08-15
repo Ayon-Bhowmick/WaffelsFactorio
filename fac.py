@@ -6,7 +6,7 @@ import pytz
 import subprocess
 
 SAVE_PATH_WIN = f"\\Users\\{os.getlogin()}\\AppData\\Roaming\\Factorio\\saves"
-SAVE_PATH_MAC = "~/Library/Application Support/factorio/saves"
+SAVE_PATH_MAC = "/Library/Application Support/factorio/saves"
 
 def push():
     shutil.copyfile(save_path, os.getcwd() + "\\waffle.zip")
