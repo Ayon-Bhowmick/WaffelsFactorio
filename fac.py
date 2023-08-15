@@ -3,9 +3,18 @@ from sys import platform
 import shutil
 from zipfile import ZipFile
 from datetime import date
+import subprocess
 
 SAVE_PATH_WIN = f"\\Users\\{os.getlogin()}\\AppData\\Roaming\\Factorio\\saves"
 SAVE_PATH_MAC = "~/Library/Application Support/factorio/saves"
+
+def get_paths():
+    file_paths = []
+    for root, directories, files in os.walk("./waffle"):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            file_paths.append(filepath)
+    return file_paths
 
 def push():
     shutil.copyfile(save_path, os.getcwd() + "\\waffle.zip")
@@ -17,13 +26,20 @@ def push():
     os.system("git push")
 
 def pull():
-    pass
+    new_save = "Already up to date." not in str(subprocess.check_output("git pull", shell=True))
+    if new_save:
+        with ZipFile("./waffle.zip", "w") as zip:
+            for file in get_paths():
+                zip.write(file)
+        shutil.copyfile("./waffle.zip", save_path)
+    else:
+        print("no new save")
 
 if __name__ == "__main__":
     if platform == "win32":
         print("Windows detected")
         assert os.path.exists(SAVE_PATH_WIN), "Path does not exist"
         save_path = SAVE_PATH_WIN + "\\waffle.zip"
-        push()
     else:
         pass
+    push()
