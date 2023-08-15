@@ -2,6 +2,7 @@ import os
 from sys import platform
 import shutil
 from zipfile import ZipFile
+from datetime import date
 
 SAVE_PATH_WIN = f"\\Users\\{os.getlogin()}\\AppData\\Roaming\\Factorio\\saves"
 SAVE_PATH_MAC = "~/Library/Application Support/factorio/saves"
@@ -11,6 +12,9 @@ def push():
     with ZipFile("./waffle.zip", "r") as zipObj:
         zipObj.extractall("./waffle")
     os.remove("./waffle.zip")
+    os.system("git add *")
+    os.system(f"git commit -m \"Update {date.today()}\"")
+    os.system("git push")
 
 def pull():
     pass
