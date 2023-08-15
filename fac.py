@@ -27,7 +27,8 @@ if __name__ == "__main__":
         save_path = SAVE_PATH_WIN + "\\waffle.zip"
     elif platform == "darwin":
         print("Mac detected")
-        pass
+        assert os.path.exists(SAVE_PATH_MAC), "Path does not exist"
+        save_path = SAVE_PATH_MAC + "/waffle.zip"
     assert len(argv) == 1, "Incorrect number of arguments"
     assert argv[0] in ("pull, push"), "Invalid argument"
     eval(argv[0] + "()")
