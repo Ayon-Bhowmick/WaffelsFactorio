@@ -1,7 +1,6 @@
 import os
-from sys import platform
+from sys import platform, argv
 import shutil
-from zipfile import ZipFile
 from datetime import date, datetime
 import pytz
 import subprocess
@@ -9,40 +8,26 @@ import subprocess
 SAVE_PATH_WIN = f"\\Users\\{os.getlogin()}\\AppData\\Roaming\\Factorio\\saves"
 SAVE_PATH_MAC = "~/Library/Application Support/factorio/saves"
 
-def get_paths():
-    file_paths = []
-    for root, directories, files in os.walk("./waffle"):
-        for filename in files:
-            filepath = os.path.join(root, filename)
-            file_paths.append(filepath)
-    return file_paths
-
 def push():
     shutil.copyfile(save_path, os.getcwd() + "\\waffle.zip")
-    # with ZipFile("./waffle.zip", "r") as zipObj:
-    #     zipObj.extractall("./waffle")
-    # os.remove("./waffle.zip")
     os.system("git add *")
-    time = datetime.now(pytz.timezone("America/New_York"))
-    current_time = time.strftime("%H:%M:%S")
-    os.system(f"git commit -m \"Update {date.today()} {current_time}\"")
+    current_time = datetime.now(pytz.timezone("America/New_York"))
+    current_time_str = current_time.strftime("%H:%M:%S")
+    os.system(f"git commit -m \"Saved {date.today()} {current_time_str}\"")
     os.system("git push")
 
 def pull():
-    new_save = "Already up to date." not in str(subprocess.check_output("git pull", shell=True))
-    if True:
-        # with ZipFile("./waffle.zip", "w") as zip:
-        #     for file in get_paths():
-        #         zip.write(file)
-        shutil.copyfile("./waffle.zip", save_path)
-    else:
-        print("no new save")
+    assert "Already up to date." not in str(subprocess.check_output("git pull", shell=True)), "No new save"
+    shutil.copyfile("./waffle.zip", save_path)
 
 if __name__ == "__main__":
     if platform == "win32":
         print("Windows detected")
         assert os.path.exists(SAVE_PATH_WIN), "Path does not exist"
         save_path = SAVE_PATH_WIN + "\\waffle.zip"
-    else:
+    elif platform == "darwin":
+        print("Mac detected")
         pass
-    push()
+    assert len(argv) == 1, "Incorrect number of arguments"
+    assert argv[0] in ("pull, push"), "Invalid argument"
+    eval(argv[0] + "()")
