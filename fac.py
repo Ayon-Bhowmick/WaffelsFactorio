@@ -1,5 +1,5 @@
 import os
-from sys import platform, argv
+from sys import platform
 import shutil
 from datetime import date, datetime
 import pytz
@@ -17,8 +17,9 @@ def push():
     os.system("git push")
 
 def pull():
-    assert "Already up to date." not in str(subprocess.check_output("git pull", shell=True)), "No new save"
-    shutil.copyfile("./waffle.zip", save_path)
+    if out := "Already up to date." not in str(subprocess.check_output("git pull", shell=True)):
+        shutil.copyfile("./waffle.zip", save_path)
+    return out
 
 if __name__ == "__main__":
     if platform == "win32":
@@ -29,6 +30,5 @@ if __name__ == "__main__":
         print("Mac detected")
         assert os.path.exists(SAVE_PATH_MAC), "Path does not exist"
         save_path = SAVE_PATH_MAC + "/waffle.zip"
-    assert len(argv) == 1, "Incorrect number of arguments"
-    assert argv[0] in ("pull, push"), "Invalid argument"
-    eval(argv[0] + "()")
+    if not pull():
+        push()
