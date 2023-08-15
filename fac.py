@@ -2,7 +2,8 @@ import os
 from sys import platform
 import shutil
 from zipfile import ZipFile
-from datetime import date
+from datetime import date, datetime
+import pytz
 import subprocess
 
 SAVE_PATH_WIN = f"\\Users\\{os.getlogin()}\\AppData\\Roaming\\Factorio\\saves"
@@ -22,7 +23,9 @@ def push():
         zipObj.extractall("./waffle")
     os.remove("./waffle.zip")
     os.system("git add *")
-    os.system(f"git commit -m \"Update {date.today()}\"")
+    time = datetime.now(pytz.timezone("America/New_York"))
+    current_time = time.strftime("%H:%M:%S")
+    os.system(f"git commit -m \"Update {date.today()} {current_time}\"")
     os.system("git push")
 
 def pull():
