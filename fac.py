@@ -30,7 +30,7 @@ def push():
 
 def pull():
     new_save = "Already up to date." not in str(subprocess.check_output("git pull", shell=True))
-    if new_save:
+    if True:
         # with ZipFile("./waffle.zip", "w") as zip:
         #     for file in get_paths():
         #         zip.write(file)
