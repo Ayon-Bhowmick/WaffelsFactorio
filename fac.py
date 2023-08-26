@@ -26,10 +26,10 @@ if __name__ == "__main__":
     if platform == "win32":
         print("Windows detected")
         assert os.path.exists(SAVE_PATH_WIN), "Path does not exist"
-        save_path = SAVE_PATH_WIN + F"\\{FILENAME}"
+        save_path = SAVE_PATH_WIN + f"\\{FILENAME}"
     elif platform == "darwin":
         print("Mac detected")
         assert os.path.exists(SAVE_PATH_MAC), "Path does not exist"
-        save_path = SAVE_PATH_MAC + F"/{FILENAME}"
+        save_path = SAVE_PATH_MAC + f"/{FILENAME}"
     if not pull():
         push()
